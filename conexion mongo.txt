@@ -1,0 +1,1 @@
+mongodb+srv://raulrosado91:<password>@buyshare.t3ffzxr.mongodb.net/test
