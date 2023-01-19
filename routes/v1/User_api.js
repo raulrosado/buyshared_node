@@ -8,16 +8,20 @@ router.get('/', function(req, res, next) {
   res.json({status:true,online:"true"});
 });
 
+
 router.post('/add_user', async (req,res) =>{
     const UserModel = require('../../Models/User.model')
+    const hashPasswordFunction = require('../../bin/hashPassword');
 
     const nombre = req.body.firstName.split(' ');
-    console.log(nombre[0])
+    const hash = await hashPasswordFunction.hashPassword(req.body.password);
+    console.log("fuera:"+hash)
+
     var infoUser = { 
         name : nombre[0],
         apellidos : nombre[1] + ' ' +nombre[2],
         email : req.body.email,
-        password : req.body.password,
+        password : hash,
         avatar : "",
         token : "",
         estado : 1
