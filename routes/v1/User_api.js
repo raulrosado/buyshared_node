@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Mongodb = require('../../bin/mongodb');
+const { checkApiKey } = require("../../middlewares/auth.handler");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -30,14 +31,14 @@ router.post('/add_user', async (req,res) =>{
     })
 });
 
-router.get('/user',function(req,res){
+router.get('/user',checkApiKey, (req,res)=>{
     const UserModel = require('../../Models/User.model')
     UserModel
     .find()
     .then(allUsers => res.json(allUsers))
 });
 
-router.get('/user/detail/:id', async (req,res) => {
+router.get('/user/detail/:id',checkApiKey, async (req,res) => {
     const UserModel = require('../../Models/User.model')
     const idUser = req.params.id
     console.log(idUser)
