@@ -25,7 +25,8 @@ router.post('/add_user', async (req,res) =>{
     await newUser.save()
 
     res.json({
-        firstName:infoUser
+        status:true,
+        user:infoUser
     })
 });
 
