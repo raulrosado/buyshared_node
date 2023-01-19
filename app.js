@@ -4,11 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
+require('dotenv').config;
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var apiRouterV1 = require('./routes/v1/api');
-
+var apiRouterV1 = require('./routes/v1/User_api');
 var app = express();
 
 // view engine setup
