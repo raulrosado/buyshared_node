@@ -8,6 +8,19 @@ router.get('/', function(req, res, next) {
   res.json({status:true,online:"true"});
 });
 
+router.post('/login', async (req,res) =>{
+    const UserModel = require('../../Models/User.model')
+    const verifyPasswordFunction = require('../../bin/verifyPassword');
+
+    const query = UserModel.findOne({ 'email': req.body.email });
+    const infoUser = await query.exec();
+    const ifValid = await verifyPasswordFunction.verifyPassword(req.body.password,infoUser.password);
+    if(ifValid){
+        res.json({status:true,online:"true"});    
+    }else{
+        res.json({status:false});
+    }
+});
 
 router.post('/add_user', async (req,res) =>{
     const UserModel = require('../../Models/User.model')
