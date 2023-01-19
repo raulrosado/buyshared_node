@@ -41,7 +41,7 @@ router.post('/add_user', async (req,res) =>{
     };
     const newUser = new UserModel(infoUser)
     await newUser.save()
-
+    delete infoUser.password
     res.json({
         status:true,
         user:infoUser
