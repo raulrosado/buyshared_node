@@ -62,22 +62,22 @@ router.get('/user',
     passport.authenticate('jwt',{session:false}),
     async (req,res)=>{
         const users = await service.find();
-        console.log(users)
         res.json(users);
     }
 );
 
-router.get('/user/detail/:id',checkApiKey, async (req,res) => {
-    const UserModel = require('../../Models/User.model')
-    const idUser = req.params.id
-    console.log(idUser)
-    try {
-        await UserModel
-        .findById(idUser)
-        .then(userInfo => res.json(userInfo))
-    } catch (error) {
-        console.log(error)
+router.get('/user/detail/:id',
+    passport.authenticate('jwt',{session:false}),
+    async (req,res) => {
+        try {
+            const user = await service.findOne(req.params.id);
+            delete user.password
+            console.log(user);
+            res.json(user);
+        } catch (error) {
+            console.log(error)
+        }
     }
-});
+);
 
 module.exports = router;
