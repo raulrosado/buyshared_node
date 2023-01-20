@@ -1,5 +1,6 @@
 var express = require('express');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 var router = express.Router();
 var Mongodb = require('../../bin/mongodb');
@@ -7,6 +8,7 @@ const { checkApiKey } = require("../../middlewares/auth.handler");
 
 const UserService = require('../../services/users.service');
 const service = new UserService();
+const { config } = require('../../bin/config');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -18,13 +20,18 @@ router.post('/login',
     passport.authenticate('local', {session: false}),
     async (req,res,next) =>{
         try {
-            const userInfo = req.user
-            delete userInfo['password']
-            console.log(userInfo)
+            const user = req.user;
+            const payload = {
+              sub: user.id,
+              role: user.role
+            }
+            console.log(config.jwtSecret);
+            const token = jwt.sign(payload, config.jwtSecret);
             res.json({
                 status:true,
-                user:userInfo
-            });    
+                user,
+                token
+            });   
         } catch (error) {
             next(error);
         }
@@ -39,6 +46,7 @@ router.post('/add_user', async (req,res) =>{
         email : req.body.email,
         password : req.body.password,
         avatar : "",
+        role :"costumer",
         token : "",
         estado : 1
     };
@@ -50,11 +58,14 @@ router.post('/add_user', async (req,res) =>{
     })
 });
 
-router.get('/user',async (req,res)=>{
-    const users = await service.find();
-    console.log(users)
-    res.json(users);
-});
+router.get('/user',
+    passport.authenticate('jwt',{session:false}),
+    async (req,res)=>{
+        const users = await service.find();
+        console.log(users)
+        res.json(users);
+    }
+);
 
 router.get('/user/detail/:id',checkApiKey, async (req,res) => {
     const UserModel = require('../../Models/User.model')
