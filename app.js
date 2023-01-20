@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var passport = require('passport');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -24,7 +25,8 @@ var corsOptions = {
   origin: "http://localhost:3000"
 };
 app.use(cors(corsOptions));
-// app.use(cors())
+app.use(passport.initialize()); // passport
+require('./utils/auth/index');
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

@@ -1,46 +1,48 @@
 var express = require('express');
+const passport = require('passport');
+
 var router = express.Router();
 var Mongodb = require('../../bin/mongodb');
 const { checkApiKey } = require("../../middlewares/auth.handler");
+
+const UserService = require('../../services/users.service');
+const service = new UserService();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.json({status:true,online:"true"});
 });
 
-router.post('/login', async (req,res) =>{
-    const UserModel = require('../../Models/User.model')
-    const verifyPasswordFunction = require('../../bin/verifyPassword');
-
-    const query = UserModel.findOne({ 'email': req.body.email });
-    const infoUser = await query.exec();
-    const ifValid = await verifyPasswordFunction.verifyPassword(req.body.password,infoUser.password);
-    if(ifValid){
-        res.json({status:true,online:"true"});    
-    }else{
-        res.json({status:false});
+/* POST login   */
+router.post('/login',
+    passport.authenticate('local', {session: false}),
+    async (req,res,next) =>{
+        try {
+            const userInfo = req.user
+            delete userInfo['password']
+            console.log(userInfo)
+            res.json({
+                status:true,
+                user:userInfo
+            });    
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
 router.post('/add_user', async (req,res) =>{
-    const UserModel = require('../../Models/User.model')
-    const hashPasswordFunction = require('../../bin/hashPassword');
-
     const nombre = req.body.firstName.split(' ');
-    const hash = await hashPasswordFunction.hashPassword(req.body.password);
-    console.log("fuera:"+hash)
-
     var infoUser = { 
         name : nombre[0],
         apellidos : nombre[1] + ' ' +nombre[2],
         email : req.body.email,
-        password : hash,
+        password : req.body.password,
         avatar : "",
         token : "",
         estado : 1
     };
-    const newUser = new UserModel(infoUser)
-    await newUser.save()
+    service.AddUser(infoUser)
     delete infoUser.password
     res.json({
         status:true,
@@ -48,11 +50,10 @@ router.post('/add_user', async (req,res) =>{
     })
 });
 
-router.get('/user',checkApiKey, (req,res)=>{
-    const UserModel = require('../../Models/User.model')
-    UserModel
-    .find()
-    .then(allUsers => res.json(allUsers))
+router.get('/user',async (req,res)=>{
+    const users = await service.find();
+    console.log(users)
+    res.json(users);
 });
 
 router.get('/user/detail/:id',checkApiKey, async (req,res) => {
@@ -66,7 +67,6 @@ router.get('/user/detail/:id',checkApiKey, async (req,res) => {
     } catch (error) {
         console.log(error)
     }
-
 });
 
 module.exports = router;
