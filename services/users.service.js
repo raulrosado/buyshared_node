@@ -18,13 +18,17 @@ class UserService {
     }
 
     async findOne(idUser){
-        return UserModel.findById(idUser).exec();
+        return UserModel.find({ '_id': idUser }).exec();
     }
 
     async findByEmail(email){
         const query = UserModel.findOne({ 'email': email });
         const infoUser = await query.exec();
         return infoUser;
+    }
+
+    async findAvatarById(idUser){
+        return UserModel.findOne({ '_id': idUser },{avatar:1}).exec();
     }
 }
 

@@ -70,6 +70,7 @@ router.get('/user/detail/:id',
     passport.authenticate('jwt',{session:false}),
     async (req,res) => {
         try {
+            console.log(req.params.id);
             const user = await service.findOne(req.params.id);
             delete user.password
             console.log(user);
