@@ -1,4 +1,6 @@
 const ListModel = require('../Models/List.model')
+const TaskService = require('./task.service');
+const taskService = new TaskService();
 
 class ListService {
     constructor() {}
@@ -18,8 +20,14 @@ class ListService {
 
     async findByIdUser(idUser){
         const query = ListModel.find({ 'id_user': idUser });
-        const list = await query.exec();
-        return list;
+        let lists = await query.exec();
+        let newLists = [];
+        for (const [index, element] of lists.entries()) {
+            const cant = await taskService.getCantByIdList(element.id);
+            const course = {...element._doc,'cant':cant};
+            newLists.push(course);
+        }
+        return newLists;
     }
 }
 

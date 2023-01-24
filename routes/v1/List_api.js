@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 var router = express.Router();
 
 const ListService = require('../../services/list.service');
+
 const service = new ListService();
 const { config } = require('../../bin/config');
 

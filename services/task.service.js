@@ -26,6 +26,11 @@ class TaskService {
         const list = await query.exec();
         return list;
     }
+    async getCantByIdList(idList){
+        const query = TaskModel.find({ 'id_lista': idList }).count();
+        const count = await query.exec();
+        return count;
+    }
     async findByIdEvent(idEvent){
         const query = TaskModel.find({ 'id_evento': idEvent });
         const list = await query.exec();
