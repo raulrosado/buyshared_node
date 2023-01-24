@@ -17,7 +17,7 @@ class ListService {
     }
 
     async findByIdUser(idUser){
-        const query = ListModel.findOne({ 'id_user': idUser });
+        const query = ListModel.find({ 'id_user': idUser });
         const list = await query.exec();
         return list;
     }
