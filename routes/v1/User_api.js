@@ -7,6 +7,7 @@ var router = express.Router();
 const UserService = require('../../services/users.service');
 const service = new UserService();
 const { config } = require('../../bin/config');
+var Mongodb = require('../../bin/mongodb');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

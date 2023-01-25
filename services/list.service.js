@@ -1,7 +1,6 @@
 const ListModel = require('../Models/List.model')
 const TaskService = require('./task.service');
 const UserService = require('./users.service');
-const ListService = require('./list.service');
 const taskService = new TaskService();
 const userService = new UserService();
 

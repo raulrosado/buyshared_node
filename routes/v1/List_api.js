@@ -1,36 +1,43 @@
-var express = require('express');
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
+var express = require("express");
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
 var router = express.Router();
 
-const ListService = require('../../services/list.service');
-
+const ListService = require("../../services/list.service");
 const service = new ListService();
-const { config } = require('../../bin/config');
+const { config } = require("../../bin/config");
 
-
-router.get('/', async (req,res)=>{
+router.get("/",passport.authenticate("jwt", { session: false }), async (req, res) => {
+  console.log(req.user.sub);
   const list = await service.find();
   res.json(list);
 });
 
-router.post('/addList',
-  passport.authenticate('jwt',{session:false}),
-  async (req,res)=>{
-  const listParams = {
-    nombre : req.params.nombre,
-    estado:1
+router.post(
+  "/addList",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    console.log(req.user);
+    const listParams = {
+      id_user: req.user.sub,
+      id_event: req.params.event,
+      nombre: req.params.nombre,
+      estado: 1,
+      referencia: "",
+    };
+    const list = await service.AddList(listParams);
+    res.json(list);
   }
-  const list = await service.AddList(listParams);
-  res.json(list);
-});
+);
 
-router.get('/user/:id_user', 
-  passport.authenticate('jwt',{session:false}),
-  async (req,res)=>{
+router.get(
+  "/user/:id_user",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    console.log(req.user);                                         
     const list = await service.findByIdUser(req.params.id_user);
     res.json(list);
-});
-
+  }
+);
 
 module.exports = router;
