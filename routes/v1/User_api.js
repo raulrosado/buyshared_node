@@ -3,8 +3,6 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
 var router = express.Router();
-var Mongodb = require('../../bin/mongodb');
-const { checkApiKey } = require("../../middlewares/auth.handler");
 
 const UserService = require('../../services/users.service');
 const service = new UserService();
@@ -25,7 +23,7 @@ router.post('/login',
               sub: user.id,
               role: user.role
             }
-            console.log(config.jwtSecret);
+            // console.log(config.jwtSecret);
             const token = jwt.sign(payload, config.jwtSecret);
             res.json({
                 status:true,
@@ -70,7 +68,7 @@ router.get('/user/detail/:id',
     passport.authenticate('jwt',{session:false}),
     async (req,res) => {
         try {
-            console.log(req.params.id);
+            // console.log(req.params.id);
             const user = await service.findOne(req.params.id);
             delete user.password
             console.log(user);

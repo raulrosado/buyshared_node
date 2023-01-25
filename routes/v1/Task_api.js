@@ -13,17 +13,23 @@ router.get('/', async (req,res)=>{
   res.json(list);
 });
 
-router.get('/user/:id_user', async (req,res)=>{
+router.get('/user/:id_user',
+  passport.authenticate('jwt',{session:false}),
+  async (req,res)=>{
   const list = await service.findByIdUser(req.params.id_user);
   res.json(list);
 });
 
-router.get('/list/:id_list', async (req,res)=>{
+router.get('/list/:id_list',
+  passport.authenticate('jwt',{session:false}),
+  async (req,res)=>{
   const list = await service.findByIdList(req.params.id_list);
   res.json(list);
 });
 
-router.get('/event/:id_event', async (req,res)=>{
+router.get('/event/:id_event',
+  passport.authenticate('jwt',{session:false}),
+  async (req,res)=>{
   const list = await service.findByIdEvent(req.params.id_event);
   res.json(list);
 });

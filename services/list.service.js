@@ -1,20 +1,16 @@
 const ListModel = require('../Models/List.model')
 const TaskService = require('./task.service');
 const UserService = require('./users.service');
+const ListService = require('./list.service');
 const taskService = new TaskService();
 const userService = new UserService();
 
 class ListService {
     constructor() {}
-    // async AddUser(user){
-    //     const hash = await hashPasswordFunction.hashPassword(user.password);
-    //     const newUser = {
-    //         ...user,
-    //         password:hash
-    //     }
-    //     const newUserCreate = new UserModel(newUser)
-    //     return await newUserCreate.save()
-    // }
+    async AddList(list){
+        const newListCreate = new ListModel(list)
+        return await newListCreate.save()
+    }
 
     async find(){
         return ListModel.find().exec();
@@ -23,7 +19,7 @@ class ListService {
     async findByIdUser(idUser){
         const query = ListModel.find({ 'id_user': idUser });
         let lists = await query.exec();
-        let newLists = [];
+        let newLists = [];  
         let newListsAvatar = [];
         for (const [index, element] of lists.entries()) {
             //cantidad de tareas en la lista

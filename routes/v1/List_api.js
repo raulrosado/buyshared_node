@@ -14,9 +14,22 @@ router.get('/', async (req,res)=>{
   res.json(list);
 });
 
-router.get('/user/:id_user', async (req,res)=>{
-  const list = await service.findByIdUser(req.params.id_user);
+router.post('/addList',
+  passport.authenticate('jwt',{session:false}),
+  async (req,res)=>{
+  const listParams = {
+    nombre : req.params.nombre,
+    estado:1
+  }
+  const list = await service.AddList(listParams);
   res.json(list);
+});
+
+router.get('/user/:id_user', 
+  passport.authenticate('jwt',{session:false}),
+  async (req,res)=>{
+    const list = await service.findByIdUser(req.params.id_user);
+    res.json(list);
 });
 
 

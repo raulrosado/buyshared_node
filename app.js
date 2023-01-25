@@ -24,11 +24,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var corsOptions = {
-  origin: "http://localhost:3000"
+  origin: "*",
 };
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(passport.initialize()); // passport
 require('./utils/auth/index');
+
+app.use(express.static('public')); 
+app.use('/images', express.static('images'));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
