@@ -17,15 +17,15 @@ router.post(
   "/addList",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    console.log(req.user);
+    console.log(req.body);
     const listParams = {
       id_user: req.user.sub,
-      id_event: req.params.event,
-      nombre: req.params.nombre,
+      id_event: req.body.event,
+      nombre: req.body.nombre,
       estado: 1,
       referencia: "",
     };
-    const list = await service.AddList(listParams);
+    const list = await service.AddList(listParams).then;
     res.json(list);
   }
 );
