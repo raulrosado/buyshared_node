@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 var apiRouterV1 = require('./routes/v1/User_api');
 var apiListV1 = require('./routes/v1/List_api');
 var apiTaskV1 = require('./routes/v1/Task_api');
+var apiEventV1 = require('./routes/v1/Event_api');
 var app = express();
 
 // view engine setup
@@ -39,6 +40,7 @@ app.use('/users', usersRouter);
 app.use('/v1/api', apiRouterV1);
 app.use('/v1/api/list', apiListV1);
 app.use('/v1/api/task', apiTaskV1);
+app.use('/v1/api/event', apiEventV1);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
