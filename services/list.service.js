@@ -25,7 +25,6 @@ class ListService {
             const cant = await taskService.getCantByIdList(element.id);
             const course = {...element._doc,'cant':cant};
             newLists.push(course);
-
             //buscar los avatares de los usuarios de la lista
             let listaId = [];
             const avatar = await userService.findAvatarById(element.id_user);
@@ -37,11 +36,21 @@ class ListService {
                 listaId.push(avatar);
             }
             newListsAvatar.push(listaId);
-            // console.log('---------------------------------------');
         }
-        // console.log(newListsAvatar);Add:
         newLists.push(newListsAvatar);
         return newLists;
+    }
+
+    async getDetailList(idList){
+        const query = ListModel.findOne({ '_id': idList });
+        let lists = await query.exec();
+        const task = await taskService.findByIdList(idList);
+        const respuesta = {
+            ...lists._doc,
+            task
+        }
+        console.log(respuesta)
+        return respuesta;
     }
 }
 

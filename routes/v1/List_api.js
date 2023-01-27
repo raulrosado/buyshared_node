@@ -40,4 +40,13 @@ router.get(
   }
 );
 
+router.get(
+  "/:idList",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {                                      
+    const list = await service.getDetailList(req.params.idList);
+    res.json(list);
+  }
+);
+
 module.exports = router;
