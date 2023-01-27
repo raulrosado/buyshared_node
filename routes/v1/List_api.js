@@ -8,7 +8,7 @@ const service = new ListService();
 const { config } = require("../../bin/config");
 
 router.get("/",passport.authenticate("jwt", { session: false }), async (req, res) => {
-  console.log(req.user.sub);
+  // console.log(req.user.sub);
   const list = await service.find();
   res.json(list);
 });
@@ -17,7 +17,7 @@ router.post(
   "/addList",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const listParams = {
       id_user: req.user.sub,
       id_event: req.body.event,
@@ -34,7 +34,7 @@ router.get(
   "/user/:id_user",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    console.log(req.user);                                         
+    // console.log(req.user);                                         
     const list = await service.findByIdUser(req.params.id_user);
     res.json(list);
   }

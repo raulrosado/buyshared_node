@@ -21,9 +21,19 @@ class EventService {
         let newLists = [];  
         let newListsAvatar = [];
         for (const [index, element] of lists.entries()) {
+            let porC = 0;
+            let taskComplet = 0;
             //cantidad de tareas en la lista
-            const cant = await taskService.getCantByIdList(element.id);
-            const course = {...element._doc,'cant':cant};
+            // const cant = await taskService.getCantByIdList(element.id);
+            const task = await taskService.findByIdEvent(element.id);
+            
+            for (const [index, element] of task.entries()) {
+                if(element.estado == 2){
+                    taskComplet++;
+                }
+            }
+            porC = (taskComplet / task.length)*100;
+            const course = {...element._doc,'cant':task.length,'complet':porC};
             newLists.push(course);
 
             //buscar los avatares de los usuarios de la lista
@@ -36,10 +46,11 @@ class EventService {
                 const avatar = await userService.findAvatarById(usuario.id_user);
                 listaId.push(avatar);
             }
+            // console.log(listaId);
             newListsAvatar.push(listaId);
             // console.log('---------------------------------------');
         }
-        // console.log(newListsAvatar);Add:
+        
         newLists.push(newListsAvatar);
         return newLists;
     }
