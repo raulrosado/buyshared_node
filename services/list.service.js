@@ -44,10 +44,24 @@ class ListService {
     async getDetailList(idList){
         const query = ListModel.findOne({ '_id': idList });
         let lists = await query.exec();
-        const task = await taskService.findByIdList(idList);
+        let avatarList = [];
+        const otros = await ListModel.find({'referencia':idList}).exec();
+        for (const [index, user] of otros.entries()) {
+            const avatar = await userService.findAvatarById(user.id_user);
+            avatarList.push(avatar);
+        }
+
+        const tasks = await taskService.findByIdList(idList);
+        const taskList = [];
+        for (const [index, task] of tasks.entries()) {
+            taskList.push(task);
+            const avatar = [];
+            
+        }
         const respuesta = {
             ...lists._doc,
-            task
+            avatarList,
+            tasks
         }
         console.log(respuesta)
         return respuesta;

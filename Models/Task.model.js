@@ -5,7 +5,8 @@ const taskSchema = mongoose.Schema({
 	id_lista:String,
 	id_evento:String,
 	texto:String,
-	estado:Number
+	estado:Number,
+	referencia:String
 })
 
 const Tasks = mongoose.model('tasks',taskSchema)

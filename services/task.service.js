@@ -36,6 +36,11 @@ class TaskService {
         const list = await query.exec();
         return list;
     }
+    // async findByIdReference(id){
+    //     const query = TaskModel.find({ 'referencia': idEvent });
+    //     const list = await query.exec();
+    //     return list;
+    // }
 }
 
 module.exports = TaskService;
