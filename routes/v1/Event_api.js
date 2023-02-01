@@ -73,4 +73,14 @@ router.get(
   }
 );
 
+router.get(
+  "/:id_event",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    console.log(req.params.id_event);                                         
+    const list = await service.getDetailEvent(req.params.id_event);
+    res.json(list);
+  }
+);
+
 module.exports = router;

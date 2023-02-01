@@ -53,11 +53,11 @@ class ListService {
 
         const tasks = await taskService.findByIdList(idList);
         const taskList = [];
-        for (const [index, task] of tasks.entries()) {
-            taskList.push(task);
-            const avatar = [];
+        // for (const [index, task] of tasks.entries()) {
+        //     taskList.push(task);
+        //     const avatar = [];
             
-        }
+        // }
         const respuesta = {
             ...lists._doc,
             avatarList,

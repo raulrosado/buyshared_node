@@ -54,6 +54,42 @@ class EventService {
         newLists.push(newListsAvatar);
         return newLists;
     }
+
+    async getDetailEvent(idEvent){
+        const query = EventModel.findOne({ '_id': idEvent });
+        let lists = await query.exec();
+        // console.log(lists);
+        let newLists;  
+        let newListsAvatar = [];
+        
+            let porC = 0;
+            let taskComplet = 0;
+            //cantidad de tareas en la lista
+            // const cant = await taskService.getCantByIdList(element.id);
+            const task = await taskService.findByIdEvent(lists._id);
+            // console.log(task)
+           
+            // const course = {...lists._doc,'task':task};
+            // newLists.push(course);
+
+            // //buscar los avatares de los usuarios de la lista
+            let listaId = [];
+            const avatar = await userService.findAvatarById(lists.id_user);
+            listaId.push(avatar);
+
+            const listaUsuariosByIdList = await EventModel.find({'referencia':lists._id}).exec();
+            for (const [index, usuario] of listaUsuariosByIdList.entries()) {
+                const avatar2 = await userService.findAvatarById(usuario.id_user);
+                listaId.push(avatar2);
+            }
+            
+
+            // console.log('---------------------------------------');
+            const detail = {...lists._doc,'task':task,'avatar':listaId};
+            // newLists.push(detail);
+            console.log(detail)
+            return detail;
+    }
 }
 
 module.exports = EventService;

@@ -34,5 +34,21 @@ router.get('/event/:id_event',
   res.json(list);
 });
 
+router.post(
+  "/addTask",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const listParams = {
+      id_user: req.user.sub,
+      id_evento: req.body.idEvent,
+      id_lista: req.body.idList,
+      texto: req.body.task,
+      estado: 1,
+      referencia: "",
+    };
+    const list = await service.addTask(listParams).then;
+    res.json(list);
+  }
+);
 
 module.exports = router;

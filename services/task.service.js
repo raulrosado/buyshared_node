@@ -2,15 +2,10 @@ const TaskModel = require('../Models/Task.model')
 
 class TaskService {
     constructor() {}
-    // async AddUser(user){
-    //     const hash = await hashPasswordFunction.hashPassword(user.password);
-    //     const newUser = {
-    //         ...user,
-    //         password:hash
-    //     }
-    //     const newUserCreate = new UserModel(newUser)
-    //     return await newUserCreate.save()
-    // }
+    async addTask(newTask){
+        const newTaskCreate = new TaskModel(newTask)
+        return await newTaskCreate.save()
+    }
 
     async find(){
         return TaskModel.find().exec();
