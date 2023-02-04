@@ -4,6 +4,7 @@ const solicitudesSchema = mongoose.Schema({
 	id_user:String,
 	id_lista:String,
 	id_evento:String,
+	email:String,
 	token:String,
 	estado:Number
 })

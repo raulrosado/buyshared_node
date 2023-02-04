@@ -2,6 +2,7 @@ var express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 var router = express.Router();
+const hashToken = require('../../bin/hashPassword');
 
 const SolicitudService = require('../../services/solicitud.service');
 const service = new SolicitudService();
@@ -14,14 +15,17 @@ router.get("/",passport.authenticate("jwt", { session: false }), async (req, res
 });
 
 router.post(
-  "/sendEmail",
+  "/sendSolicitud",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    // console.log(req.body);
+    const hash = await hashToken.hashPassword(req.user.sub);
+    console.log(req.body)
     const listParams = {
       id_user: req.user.sub,
-      id_event: req.body.event,
-      token: req.body.token,
+      id_evento: req.body.idEvent,
+      id_lista: req.body.idList,
+      email: req.body.email,
+      token: hash,
       estado: 1
     };
     const list = await service.addSolicitud(listParams).then;

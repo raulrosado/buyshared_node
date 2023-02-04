@@ -24,7 +24,6 @@ router.post('/login',
               sub: user.id,
               role: user.role
             }
-            // console.log(config.jwtSecret);
             const token = jwt.sign(payload, config.jwtSecret);
             res.json({
                 status:true,
