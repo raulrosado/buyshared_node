@@ -87,7 +87,7 @@ class EventService {
             // console.log('---------------------------------------');
             const detail = {...lists._doc,'task':task,'avatar':listaId};
             // newLists.push(detail);
-            console.log(detail)
+            // console.log(detail)
             return detail;
     }
 }

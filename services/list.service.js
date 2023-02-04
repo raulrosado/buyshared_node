@@ -63,7 +63,7 @@ class ListService {
             avatarList,
             tasks
         }
-        console.log(respuesta)
+        // console.log(respuesta)
         return respuesta;
     }
 }
