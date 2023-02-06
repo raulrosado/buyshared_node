@@ -66,6 +66,15 @@ class ListService {
         // console.log(respuesta)
         return respuesta;
     }
+
+    async delList(idList){
+        const tasks = taskService.deleteAllTasksByIdList(idList)
+        const delList = await ListModel.deleteOne({ '_id': idList });
+        delList.exec();
+        return {
+            'success':true
+        }
+    }
 }
 
 module.exports = ListService;

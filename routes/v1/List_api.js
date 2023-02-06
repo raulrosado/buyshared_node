@@ -49,4 +49,13 @@ router.get(
   }
 );
 
+router.delete(
+  "/delList/:id_list",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {                                        
+      const list = await service.delList(req.params.id_list);
+      res.json(list);
+    }
+  )
+
 module.exports = router;

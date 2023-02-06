@@ -31,11 +31,22 @@ class TaskService {
         const list = await query.exec();
         return list;
     }
-    // async findByIdReference(id){
-    //     const query = TaskModel.find({ 'referencia': idEvent });
-    //     const list = await query.exec();
-    //     return list;
-    // }
+    async deleteAllTasksByIdEvent(idEvent){
+        const query = TaskModel.deleteMany({ 'id_evento': idEvent });
+        const list = await query.exec(); 
+        let res ={
+            "success":true
+        }
+        return res
+    }
+    async deleteAllTasksByIdList(idList){
+        const query = TaskModel.deleteMany({ 'id_lista': idList });
+        const list = await query.exec(); 
+        let res ={
+            "success":true
+        }
+        return res
+    }
 }
 
 module.exports = TaskService;

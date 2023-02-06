@@ -34,9 +34,6 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   upload.single('file'),
   async (req, res) => {
-    console.log(req.user);
-    console.log(req.file);
-    console.log(req.body.name_list)
     if (req.file.length == 0) {
         responseb.error = true;
         responseb.mensaje = 'Ingrese una imagen';
@@ -66,8 +63,7 @@ router.post(
 router.get(
   "/user/:id_user",
   passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    // console.log(req.user);                                         
+  async (req, res) => {                                      
     const list = await service.findByIdUser(req.params.id_user);
     res.json(list);
   }
@@ -82,5 +78,14 @@ router.get(
     res.json(list);
   }
 );
+
+router.delete(
+  "/delEvent/:id_event",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {                                        
+      const list = await service.delEvent(req.params.id_event);
+      res.json(list);
+    }
+  )
 
 module.exports = router;

@@ -3,6 +3,7 @@ const TaskService = require('./task.service');
 const UserService = require('./users.service');
 const taskService = new TaskService();
 const userService = new UserService();
+const fs = require('fs').promises
 
 class EventService {
     constructor() {}
@@ -89,6 +90,23 @@ class EventService {
             // newLists.push(detail);
             // console.log(detail)
             return detail;
+    }
+
+    async delEvent(idEvent){
+        const tasks = taskService.deleteAllTasksByIdEvent(idEvent)
+        const event = EventModel.findOne({ '_id': idEvent});
+        let eventInfo = await event.exec();
+        fs.unlink(`./public/images/${eventInfo.bg}`)
+        .then(() => {
+            console.log('File removed')
+        }).catch(err => {
+            console.error('Something wrong happened removing the file', err)
+        })
+        const delEvent = await EventModel.deleteOne({ '_id': idEvent });
+        delEvent.exec();
+        return {
+            'success':true
+        }
     }
 }
 
