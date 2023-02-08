@@ -4,7 +4,10 @@ class TaskService {
     constructor() {}
     async addTask(newTask){
         const newTaskCreate = new TaskModel(newTask)
-        return await newTaskCreate.save()
+        await newTaskCreate.save()
+        const query = TaskModel.findOne({ 'id_user': newTask.id_user,'texto': newTask.texto });
+        const list = await query.exec();
+        return list;
     }
 
     async find(){

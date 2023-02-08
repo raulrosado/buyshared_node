@@ -28,8 +28,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 var corsOptions = {
   origin: "*",
 };
-// app.use(cors(corsOptions));
-app.use(cors());
+// app.options('*', cors())
+app.use(cors({
+    origin: '*'
+}));
+// app.use(cors());
 app.use(passport.initialize()); // passport
 require('./utils/auth/index');
 

@@ -46,7 +46,7 @@ router.post(
       estado: 1,
       referencia: "",
     };
-    const list = await service.addTask(listParams).then;
+    const list = await service.addTask(listParams);
     res.json(list);
   }
 );

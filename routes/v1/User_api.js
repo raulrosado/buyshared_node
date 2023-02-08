@@ -25,11 +25,11 @@ router.post('/login',
               role: user.role
             }
             const token = jwt.sign(payload, config.jwtSecret);
-            res.json({
+            res.status(200).send({
                 status:true,
                 user,
                 token
-            });   
+            });
         } catch (error) {
             next(error);
         }
