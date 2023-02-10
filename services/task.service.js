@@ -50,6 +50,30 @@ class TaskService {
         }
         return res
     }
+
+    async delTask(idTask){
+        await TaskModel.deleteOne({ '_id': idTask }).exec();
+        return {
+            'success':true
+        }
+    }
+
+    async complet(idTask){
+        const estado = await TaskModel.findOne({ '_id': idTask },{estado:1}).exec();
+        const newEstado = 0;
+        if(estado === 1){
+            newEstado = 2
+        }else{
+            newEstado = 1
+        }
+
+        await TaskModel.update(
+            { '_id': idTask },
+            {$set: { "estado" : newEstado}}).exec();
+        return {
+            'success':true
+        }
+    }
 }
 
 module.exports = TaskService;

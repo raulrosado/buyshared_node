@@ -27,12 +27,6 @@ router.get('/list/:id_list',
   res.json(list);
 });
 
-router.get('/event/:id_event',
-  passport.authenticate('jwt',{session:false}),
-  async (req,res)=>{
-  const list = await service.findByIdEvent(req.params.id_event);
-  res.json(list);
-});
 
 router.post(
   "/addTask",
@@ -50,5 +44,20 @@ router.post(
     res.json(list);
   }
 );
+
+router.delete('/delTask/:id_task',
+  passport.authenticate('jwt',{session:false}),
+  async (req,res)=>{
+  const list = await service.delTask(req.params.id_task);
+  res.json(list);
+});
+
+router.post('/complet/:id_task',
+  passport.authenticate('jwt',{session:false}),
+  async (req,res)=>{
+  const list = await service.complet(req.params.id_task);
+  res.json(list);
+});
+
 
 module.exports = router;
