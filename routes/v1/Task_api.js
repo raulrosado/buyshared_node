@@ -52,9 +52,10 @@ router.delete('/delTask/:id_task',
   res.json(list);
 });
 
-router.post('/complet/:id_task',
+router.get('/complet/:id_task',
   passport.authenticate('jwt',{session:false}),
   async (req,res)=>{
+  console.log(req.params.id_task)
   const list = await service.complet(req.params.id_task);
   res.json(list);
 });

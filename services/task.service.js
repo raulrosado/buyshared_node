@@ -59,9 +59,9 @@ class TaskService {
     }
 
     async complet(idTask){
-        const estado = await TaskModel.findOne({ '_id': idTask },{estado:1}).exec();
-        const newEstado = 0;
-        if(estado === 1){
+        const task = await TaskModel.findOne({ '_id': idTask },{estado:1}).exec();
+        let newEstado = 0;
+        if(task.estado === 1){
             newEstado = 2
         }else{
             newEstado = 1
@@ -71,7 +71,8 @@ class TaskService {
             { '_id': idTask },
             {$set: { "estado" : newEstado}}).exec();
         return {
-            'success':true
+            'success':true,
+            'estado':newEstado
         }
     }
 }
