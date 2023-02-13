@@ -1,8 +1,10 @@
 const UserModel = require('../Models/User.model')
 const hashPasswordFunction = require('../bin/hashPassword');
+const fs = require('fs').promises
 
 class UserService {
     constructor() {}
+    
     async AddUser(user){
         const hash = await hashPasswordFunction.hashPassword(user.password);
         const newUser = {
@@ -33,11 +35,22 @@ class UserService {
     }
 
     async changeAvatar(parametro){
-        UserModel.updateOne({'_id': {$eq: parametro.id}},
-        {
-          $set: { "avatar": parametro.avatar }
-        }) .exec();
-        return {success:true}
+        
+        const infoUser = await this.findAvatarById(parametro.id)
+        let avatar = infoUser.avatar
+        fs.unlink(`./public/images/${infoUser.avatar}`)
+            .then(() => {
+                console.log('File removed')
+                UserModel.updateOne({'_id': {$eq: parametro.id}},
+                {
+                  $set: { "avatar": parametro.avatar }
+                }) .exec();
+                return {success:true}
+
+        }).catch(err => {
+                console.error('Something wrong happened removing the file', err)
+                return false
+            })
     }
 
     async changeInfoPersonal(parametro){
@@ -60,6 +73,7 @@ class UserService {
         }).exec();
         return {success:true}
     }
+
 }
 
 module.exports = UserService;
