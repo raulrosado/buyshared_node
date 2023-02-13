@@ -9,9 +9,6 @@ const EventService = require("../../services/event.service");
 const service = new EventService();
 const { config } = require("../../bin/config");
 
-// const upload = multer({
-//   dest: 'public/images'
-// })
 // SET STORAGE
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {

@@ -18,7 +18,8 @@ class UserService {
     }
 
     async findOne(idUser){
-        return UserModel.find({ '_id': idUser }).exec();
+        const infoUser = await UserModel.findOne({ '_id': idUser }).exec();
+        return infoUser;
     }
 
     async findByEmail(email){
@@ -29,6 +30,35 @@ class UserService {
 
     async findAvatarById(idUser){
         return UserModel.findOne({ '_id': idUser },{avatar:1}).exec();
+    }
+
+    async changeAvatar(parametro){
+        UserModel.updateOne({'_id': {$eq: parametro.id}},
+        {
+          $set: { "avatar": parametro.avatar }
+        }) .exec();
+        return {success:true}
+    }
+
+    async changeInfoPersonal(parametro){
+        UserModel.updateOne({'_id': {$eq: parametro.id}},
+        {
+          $set: { 
+            "name": parametro.name,
+            "apellidos": parametro.apellidos,
+            "email": parametro.email, }
+        }) .exec();
+        return {success:true}
+    }
+
+    async changePassword(parametro){
+        UserModel.updateOne({'_id': {$eq: parametro.id}},
+        {
+          $set: { 
+            "password": await hashPasswordFunction.hashPassword(parametro.password),
+            }
+        }).exec();
+        return {success:true}
     }
 }
 
