@@ -30,8 +30,13 @@ class TaskService {
         return count;
     }
     async findByIdEvent(idEvent){
-        const query = TaskModel.find({ 'id_evento': idEvent });
+        const query = TaskModel.find({'id_evento':idEvent});
         const list = await query.exec();
+        return list;
+    }
+    async findByIdReference(idreferencia){
+        const queryRef = TaskModel.find({"id_evento": String(idreferencia)});
+        const list = await queryRef.exec();
         return list;
     }
     async deleteAllTasksByIdEvent(idEvent){
@@ -75,6 +80,21 @@ class TaskService {
             'estado':newEstado
         }
     }
+
+    removeDuplicates(originalArray, prop) {
+     var newArray = [];
+     var lookupObject  = {};
+
+     for(var i in originalArray) {
+        lookupObject[originalArray[i][prop]] = originalArray[i];
+     }
+
+     for(i in lookupObject) {
+         newArray.push(lookupObject[i]);
+     }
+      return newArray;
+    }
+
 }
 
 module.exports = TaskService;

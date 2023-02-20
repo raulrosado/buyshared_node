@@ -35,22 +35,33 @@ class UserService {
     }
 
     async changeAvatar(parametro){
-        
         const infoUser = await this.findAvatarById(parametro.id)
         let avatar = infoUser.avatar
-        fs.unlink(`./public/images/${infoUser.avatar}`)
+        if(avatar === "avatar.png"){
+            UserModel.updateOne({'_id': {$eq: parametro.id}},
+                {
+                  $set: { "avatar": parametro.avatar }
+                }) .exec();
+             return {success:true}
+        }else{
+            fs.unlink(`./public/images/${infoUser.avatar}`)
             .then(() => {
                 console.log('File removed')
                 UserModel.updateOne({'_id': {$eq: parametro.id}},
                 {
                   $set: { "avatar": parametro.avatar }
-                }) .exec();
-                return {success:true}
+                }).exec();
+                let res = {
+                 success:true,
+                 filename:parametro.avatar 
+                }
+                return res
 
-        }).catch(err => {
+            }).catch(err => {
                 console.error('Something wrong happened removing the file', err)
-                return false
+                return {success:false}
             })
+        }
     }
 
     async changeInfoPersonal(parametro){

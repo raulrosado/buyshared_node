@@ -33,8 +33,7 @@ router.post(
 router.get(
   "/user/:id_user",
   passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    // console.log(req.user);                                         
+  async (req, res) => {                                       
     const list = await service.findByIdUser(req.params.id_user);
     res.json(list);
   }

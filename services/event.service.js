@@ -24,10 +24,14 @@ class EventService {
         for (const [index, element] of lists.entries()) {
             let porC = 0;
             let taskComplet = 0;
+            let task =[]
             //cantidad de tareas en la lista
             // const cant = await taskService.getCantByIdList(element.id);
-            const task = await taskService.findByIdEvent(element.id);
-            
+           
+                task = await taskService.findByIdEvent(element.id);
+            if(task.length === 0){
+                task = await taskService.findByIdReference(element.referencia);
+            }
             for (const [index, element] of task.entries()) {
                 if(element.estado == 2){
                     taskComplet++;
@@ -62,21 +66,26 @@ class EventService {
         // console.log(lists);
         let newLists;  
         let newListsAvatar = [];
-        
             let porC = 0;
             let taskComplet = 0;
-            //cantidad de tareas en la lista
-            // const cant = await taskService.getCantByIdList(element.id);
-            const task = await taskService.findByIdEvent(lists._id);
-            // console.log(task)
-           
-            // const course = {...lists._doc,'task':task};
-            // newLists.push(course);
-
+            let task = []
+            let taskRefer=[]
+            task = await taskService.findByIdEvent(lists._id);
+            if(lists.referencia !== ''){
+                taskRefer = await taskService.findByIdReference(lists.referencia)
+            }
             // //buscar los avatares de los usuarios de la lista
             let listaId = [];
             const avatar = await userService.findAvatarById(lists.id_user);
             listaId.push(avatar);
+
+            const otrosEventos = await EventModel.find({ 'referencia': idEvent }).exec();
+            for (const [index, event] of otrosEventos.entries()) {
+                let taskR = await taskService.findByIdEvent(event._id);
+                for (const [index, taskRef] of taskR.entries()) {
+                    task.push(taskRef)
+                }
+            }
 
             const listaUsuariosByIdList = await EventModel.find({'referencia':lists._id}).exec();
             for (const [index, usuario] of listaUsuariosByIdList.entries()) {
@@ -86,9 +95,7 @@ class EventService {
             
 
             // console.log('---------------------------------------');
-            const detail = {...lists._doc,'task':task,'avatar':listaId};
-            // newLists.push(detail);
-            // console.log(detail)
+            const detail = {...lists._doc,'task':task,'taskReferencia':taskRefer,'avatar':listaId};
             return detail;
     }
 

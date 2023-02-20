@@ -94,7 +94,7 @@ router.get('/user/detail/:id',
 router.post('/postChangePictur',passport.authenticate('jwt',{session:false}),
     upload.single('file'),
     async (req, res) => {
-    if (req.file.length == 0) {
+    if (req.file.length == 0) { 
         responseb.error = true;
         responseb.mensaje = 'Ingrese una imagen';
         responseb.codigo = 400;
@@ -106,7 +106,11 @@ router.post('/postChangePictur',passport.authenticate('jwt',{session:false}),
                 avatar: req.file.originalname
               };
               const list = await service.changeAvatar(listParams);
-              res.json(list);
+              let resp ={
+                success:true,
+                filename:req.file.originalname
+              }
+               res.status(200).json(resp);
         } else {
             responseb.error = true;
             responseb.mensaje = 'Ingrese una imagen';
@@ -121,8 +125,6 @@ router.post('/postChangeInfo',
     passport.authenticate('jwt',{session:false}),
     async (req,res)=>{
         const nombre = req.body.name.split(' ');
-        console.log(req.body)
-        console.log(req.user.sub)
         var infoUser = {
             id:req.user.sub,
             name : nombre[0],
