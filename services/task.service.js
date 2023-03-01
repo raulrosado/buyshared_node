@@ -29,19 +29,29 @@ class TaskService {
         const count = await query.exec();
         return count;
     }
+    async getCantByIdEvent(idEvent){
+        const query = TaskModel.find({ 'id_evento': idEvent }).count();
+        const count = await query.exec();
+        return count;
+    }
     async findByIdEvent(idEvent){
         const query = TaskModel.find({'id_evento':idEvent});
         const list = await query.exec();
         return list;
     }
     async findByIdReference(idreferencia){
-        const queryRef = TaskModel.find({"id_evento": String(idreferencia)});
-        const list = await queryRef.exec();
-        return list;
+      const query = TaskModel.find({'id_evento':idreferencia});
+      const list = await query.exec();
+      return list;
+    }
+    async findByIdReferenceEvent(idreferencia){
+      const query = TaskModel.find({'referencia':idreferencia});
+      const list = await query.exec();
+      return list;
     }
     async deleteAllTasksByIdEvent(idEvent){
         const query = TaskModel.deleteMany({ 'id_evento': idEvent });
-        const list = await query.exec(); 
+        const list = await query.exec();
         let res ={
             "success":true
         }
@@ -49,7 +59,7 @@ class TaskService {
     }
     async deleteAllTasksByIdList(idList){
         const query = TaskModel.deleteMany({ 'id_lista': idList });
-        const list = await query.exec(); 
+        const list = await query.exec();
         let res ={
             "success":true
         }

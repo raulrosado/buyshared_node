@@ -60,7 +60,7 @@ router.post(
 router.get(
   "/user/:id_user",
   passport.authenticate("jwt", { session: false }),
-  async (req, res) => {                                      
+  async (req, res) => {
     const list = await service.findByIdUser(req.params.id_user);
     res.json(list);
   }
@@ -70,7 +70,7 @@ router.get(
   "/:id_event",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    console.log(req.params.id_event);                                         
+    console.log(req.params.id_event);
     const list = await service.getDetailEvent(req.params.id_event);
     res.json(list);
   }
@@ -79,7 +79,7 @@ router.get(
 router.delete(
   "/delEvent/:id_event",
     passport.authenticate("jwt", { session: false }),
-    async (req, res) => {                                        
+    async (req, res) => {
       const list = await service.delEvent(req.params.id_event);
       res.json(list);
     }

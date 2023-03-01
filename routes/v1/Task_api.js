@@ -38,7 +38,7 @@ router.post(
       id_lista: req.body.idList,
       texto: req.body.task,
       estado: 1,
-      referencia: "",
+      referencia: req.body.referencia,
     };
     const list = await service.addTask(listParams);
     res.json(list);

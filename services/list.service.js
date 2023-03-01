@@ -97,23 +97,6 @@ class ListService {
             'success':true
         }
     }
-
-    // async delEvent(idEvent){
-    //     const tasks = taskService.deleteAllTasksByIdEvent(idEvent)
-    //     const event = EventModel.findOne({ '_id': idEvent});
-    //     let eventInfo = await event.exec();
-    //     fs.unlink(`./public/images/${eventInfo.bg}`)
-    //     .then(() => {
-    //         console.log('File removed')
-    //     }).catch(err => {
-    //         console.error('Something wrong happened removing the file', err)
-    //     })
-    //     const delEvent = await EventModel.deleteOne({ '_id': idEvent });
-    //     delEvent.exec();
-    //     return {
-    //         'success':true
-    //     }
-    // }
 }
 
 module.exports = ListService;
