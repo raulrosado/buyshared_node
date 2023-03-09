@@ -27,17 +27,15 @@ class EventService {
             let task =[]
             let listaUsuariosByIdList
             let listaId = [];
-            // const avatar = await userService.findAvatarById(element.id_user);
-            // listaId.push(avatar);
+
             if(element.referencia === ""){
-              // console.log("referencia vacia")
               task = await taskService.findByIdReferenceEvent(element.id);
               listaUsuariosByIdList = await EventModel.find({'referencia':element.id}).exec();
+
               const avatar = await userService.findAvatarById(element.id_user);
               listaId.push(avatar);
             }else{
               try {
-                // console.log("tareas por referencia")
                 listaUsuariosByIdList = await EventModel.find({'referencia':element.referencia}).exec();
                 let refTask = await taskService.findByIdReferenceEvent(element.referencia);
                 for (const [index, element] of refTask.entries()) {
@@ -46,14 +44,13 @@ class EventService {
 
                 const listaUsuariosByIdEvent = await EventModel.findOne({'_id':element.referencia}).exec();
                 const avatar2 = await userService.findAvatarById(listaUsuariosByIdEvent.id_user);
-                console.log("avatar:"+avatar2)
                 listaId.push(avatar2);
               } catch (e) {
               }
             }
 
             for (const [index, usuario] of listaUsuariosByIdList.entries()) {
-              console.log(usuario.id_user)
+                // console.log(usuario.id_user)
                 const avatar = await userService.findAvatarById(usuario.id_user);
                 listaId.push(avatar);
             }
@@ -65,11 +62,11 @@ class EventService {
             }
             porC = (taskComplet / task.length)*100;
 
-            console.log("cantidad total:"+task.length)
+            // console.log("cantidad total:"+task.length)
             const course = {...element._doc,'cant':task.length,'complet':porC};
             newLists.push(course);
             newListsAvatar.push(listaId);
-            console.log('---------------------------------------');
+            // console.log('---------------------------------------');
         }
 
         newLists.push(newListsAvatar);

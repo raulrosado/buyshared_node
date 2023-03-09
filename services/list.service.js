@@ -20,37 +20,46 @@ class ListService {
         let lists = await query.exec();
         let newLists = [];
         let newListsAvatar = [];
+        let listaUsuariosByReferenceList
+
         for (const [index, element] of lists.entries()) {
           let listaId = [];
-          const avatar = await userService.findAvatarById(element.id_user);
-          listaId.push(avatar);
-          //cantidad de tareas en la lista
-          let cant
-          cant = await taskService.getCantByIdList(element.id);
-          if(element.referencia !== ''){
-            cant += await taskService.getCantByIdList(element.referencia);
+          let cant = 0
 
-            const listaUsuariosByReferenceList = await ListModel.findOne({'id':element.referencia}).exec();
-            if(listaUsuariosByReferenceList !== null){
-              const avatar2 = await userService.findAvatarById(listaUsuariosByReferenceList.id_user);
-              if(listaUsuariosByReferenceList.id_user !== element.id_user){
-                listaId.push(avatar2);
-              }
+          // console.log("lista:"+element)
+          // console.log("referencia:"+element.referencia)
+          // console.log("------------------------------------------------")
+
+          if(element.referencia === ''){
+            cant += await taskService.getCantByIdReference(element.id)
+            listaUsuariosByReferenceList = await ListModel.find({'referencia':element.id}).exec();
+
+            const avatar = await userService.findAvatarById(element.id_user);
+            listaId.push(avatar);
+          }else{
+            cant += await taskService.getCantByIdReference(element.referencia)
+            try {
+              listaUsuariosByReferenceList = await ListModel.find({'referencia':element.referencia}).exec();
+              const listaUsuariosByIdList = await ListModel.findOne({'_id':element.referencia}).exec();
+              const avatar2 = await userService.findAvatarById(listaUsuariosByIdList.id_user);
+              listaId.push(avatar2);
+            } catch (e) {
             }
           }
 
-          //buscar los avatares de los usuarios de la lista
-          const listaUsuariosByIdList = await ListModel.find({'referencia':element.id}).exec();
-          for (const [index, usuario] of listaUsuariosByIdList.entries()) {
+          for (const [index, usuario] of listaUsuariosByReferenceList.entries()) {
+              // console.log(usuario.id_user)
               const avatar = await userService.findAvatarById(usuario.id_user);
               listaId.push(avatar);
-              cant += await taskService.getCantByIdList(usuario.id); //busca la cantidad de tarea de las listas de otros usuarios
           }
+
+          // console.log("cantidad de tareas referencia"+cant)
           newListsAvatar.push(listaId);
           const course = {...element._doc,'cant':cant};
           newLists.push(course);
         }
         newLists.push(newListsAvatar);
+        // console.log(newLists)
         return newLists;
     }
 
@@ -61,10 +70,10 @@ class ListService {
 
         tasks = await taskService.findByIdList(idList);
         let otrasListas = []
-        console.log(lists.referencia)
+        // console.log(lists.referencia)
         if(lists.referencia !== ''){
             otrasListas = await ListModel.find({'_id':String(lists.referencia)}).exec();
-            console.log(otrasListas)
+            // console.log(otrasListas)
         }else{
             otrasListas = await ListModel.find({'referencia':String(lists._id)}).exec();
         }

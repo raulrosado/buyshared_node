@@ -34,6 +34,11 @@ class TaskService {
         const count = await query.exec();
         return count;
     }
+    async getCantByIdReference(id){
+        const query = TaskModel.find({ 'referencia': id }).count();
+        const count = await query.exec();
+        return count;
+    }
     async findByIdEvent(idEvent){
         const query = TaskModel.find({'id_evento':idEvent});
         const list = await query.exec();
