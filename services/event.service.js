@@ -128,6 +128,11 @@ class EventService {
             'success':true
         }
     }
+
+    async getInfoEvent(idEvent){
+      const query = EventModel.findOne({ '_id': idEvent });
+      return await query.exec();
+    }
 }
 
 module.exports = EventService;

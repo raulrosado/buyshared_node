@@ -19,13 +19,12 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const hash = await hashToken.hashPassword(req.user.sub);
-    console.log(req.body)
     const listParams = {
       id_user: req.user.sub,
       id_evento: req.body.idEvent,
       id_lista: req.body.idList,
       email: req.body.email,
-      token: hash,
+      token: hash.replace("/",""),
       estado: 1
     };
     const list = await service.addSolicitud(listParams).then;

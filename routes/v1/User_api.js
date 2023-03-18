@@ -10,6 +10,7 @@ const service = new UserService();
 const { config } = require('../../bin/config');
 var Mongodb = require('../../bin/mongodb');
 const verifyPasswordFunction = require('../../bin/verifyPassword');
+var emailServer = require('../../bin/mail_config.js')
 
 // SET STORAGE
 var storage = multer.diskStorage({
@@ -26,6 +27,12 @@ var upload = multer({ storage: storage })
 router.get('/', function(req, res, next) {
   res.json({status:true,online:"true"});
 });
+
+/* GET home page. */
+// router.get('/mail', function(req, res, next) {
+//   emailServer('raul','raulrosado91@gmail.com')
+//   res.json({status:true,mail:"true"});
+// });
 
 /* POST login   */
 router.post('/login',
@@ -51,7 +58,7 @@ router.post('/login',
 
 router.post('/add_user', async (req,res) =>{
     const nombre = req.body.firstName.split(' ');
-    var infoUser = { 
+    var infoUser = {
         name : nombre[0],
         apellidos : nombre[1] + ' ' +nombre[2],
         email : req.body.email,
@@ -62,6 +69,7 @@ router.post('/add_user', async (req,res) =>{
         estado : 1
     };
     service.AddUser(infoUser)
+    emailServer(nombre[0],req.body.email,"addUser",null)
     delete infoUser.password
     res.json({
         status:true,
@@ -94,7 +102,7 @@ router.get('/user/detail/:id',
 router.post('/postChangePictur',passport.authenticate('jwt',{session:false}),
     upload.single('file'),
     async (req, res) => {
-    if (req.file.length == 0) { 
+    if (req.file.length == 0) {
         responseb.error = true;
         responseb.mensaje = 'Ingrese una imagen';
         responseb.codigo = 400;
@@ -142,11 +150,11 @@ router.post('/postChangePassword',
         const passwordNew = req.body.passwordNew;
         const passwordRepetNew = req.body.passwordRepetNew;
 
-        var infoUser = { 
+        var infoUser = {
             id:req.user.sub,
             password : passwordRepetNew,
         };
-        
+
         const infoUserChangeP = await service.findOne(req.user.sub);
         const ifValid = await verifyPasswordFunction.verifyPassword(passwordAnt,infoUserChangeP.password);
         if(ifValid){

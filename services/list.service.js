@@ -26,10 +26,6 @@ class ListService {
           let listaId = [];
           let cant = 0
 
-          // console.log("lista:"+element)
-          // console.log("referencia:"+element.referencia)
-          // console.log("------------------------------------------------")
-
           if(element.referencia === ''){
             cant += await taskService.getCantByIdReference(element.id)
             listaUsuariosByReferenceList = await ListModel.find({'referencia':element.id}).exec();
@@ -105,6 +101,11 @@ class ListService {
         return {
             'success':true
         }
+    }
+
+    async findByIdList(idList){
+        const query = ListModel.findOne({ '_id': idList });
+        return await query.exec();
     }
 }
 
