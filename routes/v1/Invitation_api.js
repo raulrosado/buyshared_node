@@ -14,6 +14,11 @@ router.get("/",passport.authenticate("jwt", { session: false }), async (req, res
   res.json(list);
 });
 
+router.get("/getInfo/:token",passport.authenticate("jwt", { session: false }), async (req, res) => {
+  const info = await service.findByToken(req.params.token);
+  res.json(info);
+});
+
 router.post(
   "/sendSolicitud",
   passport.authenticate("jwt", { session: false }),
@@ -28,6 +33,21 @@ router.post(
       estado: 1
     };
     const list = await service.addSolicitud(listParams).then;
+    res.json(list);
+  }
+);
+
+router.post('/actionSolicitud',
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const hash = await hashToken.hashPassword(req.user.sub);
+    const listParams = {  
+      id_user: req.user.sub,
+      token: req.body.token,
+      action: req.body.action
+    };
+    const list = await service.actionSolicitud(listParams);
+    console.log(list)
     res.json(list);
   }
 );

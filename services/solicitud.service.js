@@ -46,6 +46,57 @@ class SolicitudesService {
     async find(){
         return SolicitudesModel.find().exec();
     }
+
+    async findByToken(token){
+        return await SolicitudesModel.findOne({'token':token}).exec();
+    }
+
+    async actionSolicitud(parametros){
+        let resp
+        const infoSolicitud = await SolicitudesModel.findOne({'token':parametros.token}).exec();
+        switch (parametros.action) {
+          case 1:
+            await SolicitudesModel.deleteOne({'token':parametros.token}).exec();
+            resp = {
+              success:true,
+              message:'Se elimino la solicitud'
+            }
+            break;
+          case 2:
+            let infoEvent;
+            let infoList;
+            if(infoSolicitud.id_lista === '0'){
+                console.log('idLista en cero')
+                infoEvent = await eventService.getInfoEvent(infoSolicitud.id_evento)
+                const eventParams = {
+                    id_user: parametros.id_user,
+                    nombre: infoEvent.nombre,
+                    bg: infoEvent.bg,
+                    estado: infoEvent.estado,
+                    referencia: infoSolicitud.id_evento,
+                  };
+                const list = await eventService.AddEvent(eventParams);
+            }else{
+              infoList = await listService.findByIdList(infoSolicitud.id_lista)
+              const listParams = {
+                id_user: parametros.id_user,
+                id_event: "",
+                nombre: infoList.nombre,
+                estado: infoList.estado,
+                referencia: infoSolicitud.id_lista,
+              };
+              const list = await listService.AddList(listParams).then;
+            }
+            resp = {
+              success:true,
+              message:'Se acepto la solicitud'
+            }
+            break;
+          default:
+        }
+        await SolicitudesModel.deleteOne({'token':parametros.token}).exec();
+        return resp
+    }
 }
 
 module.exports = SolicitudesService;
