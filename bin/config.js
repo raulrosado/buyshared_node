@@ -8,6 +8,10 @@ const config = {
     db_name:process.env.DB_DBNAME,
     apiKey:process.env.API_KEY,
     jwtSecret:process.env.JWT_SECRET,
+    user:process.env.EMAIL_USER,
+    clientId:process.env.EMAIL_CLIENTID,
+    clientSecret:process.env.EMAIL_CLIENTSECRET,
+    refreshToken:process.env.EMAIL_REFRESHTOKEN
 }
 
 module.exports = {config};

@@ -1,7 +1,7 @@
 var nodemailer = require('nodemailer');
 const path = require('path')
-const config = require('./mailConfig.js')
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+// const config = require('./mailConfig.js')
+const {config} = require('./config');
 const {google} = require('googleapis');
 const OAuth2 = google.auth.OAuth2
 
@@ -24,7 +24,7 @@ function send_mail(name,recipient,option,info){
   });
 
   var mailOptions = {
-   from: 'raulrosado91dev@gmail.com',
+   from: '"BuyShare 🛒" <raulrosado91dev@gmail.com>',
    to: recipient,
    subject: 'BuyShare, comparte tus compras',
    html: get_html_message(name,option,info)
