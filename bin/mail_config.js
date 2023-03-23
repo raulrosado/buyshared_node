@@ -52,7 +52,7 @@ function get_html_message(name,option,info){
       return `
         <h3>Hola</h3>
         <p>El usuario ${info.usuarioNombre} , lo ha agregado a la lista de compra ${info.nombreList} . acceda al vínculo enviado para autorizar su participación.</p>
-        <a href="http://192.168.1.21:3000/accept/${info.token}">Aceptar invitación</a>
+        <a href="https://raulrosado.github.io/buyshared_react/accept/${info.token}">Aceptar invitación</a>
       `
     break;
   }
