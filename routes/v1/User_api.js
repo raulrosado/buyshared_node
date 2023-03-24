@@ -77,13 +77,25 @@ router.post('/add_user', async (req,res) =>{
     })
 });
 
-router.get('/user',
-    passport.authenticate('jwt',{session:false}),
-    async (req,res)=>{
-        const users = await service.find();
-        res.json(users);
-    }
-);
+router.post('/socialRegistrer', async(res,req) =>{
+  const nombre = req.body.firstName.split(' ');
+  var infoUser = {
+      name : nombre[0],
+      apellidos : nombre[1] + ' ' +nombre[2],
+      email : req.body.email,
+      password : req.body.password,
+      avatar : req.body.avatar,
+      role :"social",
+      token : "",
+      estado : 1
+  };
+  service.AddUser(infoUser)
+  delete infoUser.password
+  res.json({
+      status:true,
+      user:infoUser
+  })
+});
 
 router.get('/user/detail/:id',
     passport.authenticate('jwt',{session:false}),
