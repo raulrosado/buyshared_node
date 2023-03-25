@@ -78,7 +78,7 @@ router.post('/add_user', async (req,res) =>{
 });
 
 router.post('/socialRegistrer', async(res,req) =>{
-  const nombre = req.body.firstName.split(' ');
+  const nombre = req.body.nombre.split(' ');
   var infoUser = {
       name : nombre[0],
       apellidos : nombre[1] + ' ' +nombre[2],
