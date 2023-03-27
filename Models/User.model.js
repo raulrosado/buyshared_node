@@ -7,9 +7,9 @@ const userSchema = mongoose.Schema({
 	password:String,
 	avatar:String,
 	token:String,
+	role:String,
 	estado:Number
 })
 
 const User = mongoose.model('users',userSchema)
 module.exports = User
-

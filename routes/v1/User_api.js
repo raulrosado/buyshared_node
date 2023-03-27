@@ -83,18 +83,23 @@ router.post('/socialRegistrer', async(res,req) =>{
       token : "",
       estado : 1
   };
-  const user = await service.AddUser(userPost)
-  delete user.password;
-  const payload = {
-    sub: user.id,
-    role: user.role
+  let user
+  user = await services.findByEmail(req.req.body.email);
+  if(!user){
+    user = await service.AddUser(userPost)
+    delete user.password;
   }
-  const token = jwt.sign(payload, config.jwtSecret);
-  res.res.status(200).send({
-      status:true,
-      user,
-      token
-  });
+    const payload = {
+      sub: user.id,
+      role: user.role
+    }
+    const token = jwt.sign(payload, config.jwtSecret);
+    res.res.status(200).send({
+        status:true,
+        user,
+        token
+    });
+
 });
 
 router.get('/user/detail/:id',
