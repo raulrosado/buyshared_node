@@ -28,12 +28,6 @@ router.get('/', function(req, res, next) {
   res.json({status:true,online:"true"});
 });
 
-/* GET home page. */
-// router.get('/mail', function(req, res, next) {
-//   emailServer('raul','raulrosado91@gmail.com')
-//   res.json({status:true,mail:"true"});
-// });
-
 /* POST login   */
 router.post('/login',
     passport.authenticate('local', {session: false}),
@@ -78,23 +72,29 @@ router.post('/add_user', async (req,res) =>{
 });
 
 router.post('/socialRegistrer', async(res,req) =>{
-  const nombre = req.body.nombre.split(' ');
-  var infoUser = {
+  const nombre = req.req.body.nombre.split(' ');
+  var userPost = {
       name : nombre[0],
       apellidos : nombre[1] + ' ' +nombre[2],
-      email : req.body.email,
-      password : req.body.password,
-      avatar : req.body.avatar,
+      email : req.req.body.email,
+      password : req.req.body.password,
+      avatar : req.req.body.avatar,
       role :"social",
       token : "",
       estado : 1
   };
-  service.AddUser(infoUser)
-  delete infoUser.password
-  res.json({
+  const user = await service.AddUser(userPost)
+  delete user.password;
+  const payload = {
+    sub: user.id,
+    role: user.role
+  }
+  const token = jwt.sign(payload, config.jwtSecret);
+  res.res.status(200).send({
       status:true,
-      user:infoUser
-  })
+      user,
+      token
+  });
 });
 
 router.get('/user/detail/:id',
