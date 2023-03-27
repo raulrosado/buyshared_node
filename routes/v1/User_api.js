@@ -84,7 +84,7 @@ router.post('/socialRegistrer', async(res,req) =>{
       estado : 1
   };
   let user
-  user = await services.findByEmail(req.req.body.email);
+  user = await service.findByEmail(req.req.body.email);
   if(!user){
     user = await service.AddUser(userPost)
     delete user.password;
