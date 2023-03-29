@@ -12,6 +12,8 @@ var Mongodb = require('../../bin/mongodb');
 const verifyPasswordFunction = require('../../bin/verifyPassword');
 var emailServer = require('../../bin/mail_config.js')
 
+var emailServer_MailJet = require('../../utils/Mail/Mailjet/Mailjet.js')
+
 // SET STORAGE
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -63,7 +65,8 @@ router.post('/add_user', async (req,res) =>{
         estado : 1
     };
     service.AddUser(infoUser)
-    emailServer(nombre[0],req.body.email,"addUser",null)
+    // emailServer(nombre[0],req.body.email,"addUser",null)
+    emailServer_MailJet(nombre[0],req.body.email,"addUser",null)
     delete infoUser.password
     res.json({
         status:true,

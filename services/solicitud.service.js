@@ -1,5 +1,6 @@
 const SolicitudesModel = require('../Models/Solicitudes.model')
 var emailServer = require('../bin/mail_config.js')
+var emailServer_MailJet = require('../utils/Mail/Mailjet/Mailjet.js')
 const UserService = require('./users.service');
 const ListService = require('./list.service');
 const EventService = require('./event.service');
@@ -29,13 +30,13 @@ class SolicitudesService {
             nombreList = infoList.nombre
           }
           const solicitud = await SolicitudesModel.findOne({ 'id_user': newSolicitud.id_user,'id_lista': newSolicitud.id_lista,'id_evento':newSolicitud.id_evento,'email':newSolicitud.email }).exec();
-
           const info = {
             usuarioNombre: userInfo.name,
             nombreList:nombreList,
             token:solicitud.token
           }
-          emailServer(null,newSolicitud.email,"addFriend",info)
+          // emailServer(null,newSolicitud.email,"addFriend",info)
+          emailServer_MailJet(null,newSolicitud.email,"addFriend",info)
           result = true
         } else {
           result = false
@@ -54,6 +55,7 @@ class SolicitudesService {
     async actionSolicitud(parametros){
         let resp
         const infoSolicitud = await SolicitudesModel.findOne({'token':parametros.token}).exec();
+        if(infoSolicitud !== null){
         switch (parametros.action) {
           case 1:
             await SolicitudesModel.deleteOne({'token':parametros.token}).exec();
@@ -69,7 +71,7 @@ class SolicitudesService {
                 console.log('idLista en cero')
                 infoEvent = await eventService.getInfoEvent(infoSolicitud.id_evento)
                 const eventParams = {
-                    id_user: parametros.id_user,
+                    id_user: infoEvent.id_user,
                     nombre: infoEvent.nombre,
                     bg: infoEvent.bg,
                     estado: infoEvent.estado,
@@ -79,7 +81,7 @@ class SolicitudesService {
             }else{
               infoList = await listService.findByIdList(infoSolicitud.id_lista)
               const listParams = {
-                id_user: parametros.id_user,
+                id_user: infoList.id_user,
                 id_event: "",
                 nombre: infoList.nombre,
                 estado: infoList.estado,
@@ -95,8 +97,15 @@ class SolicitudesService {
           default:
         }
         await SolicitudesModel.deleteOne({'token':parametros.token}).exec();
-        return resp
+    }else{
+      resp = {
+        success:false,
+        message:'No se encuentra la solicitud'
+      }
+
     }
+    return resp
+}
 }
 
 module.exports = SolicitudesService;

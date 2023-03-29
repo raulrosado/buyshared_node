@@ -8,12 +8,6 @@ const SolicitudService = require('../../services/solicitud.service');
 const service = new SolicitudService();
 const { config } = require('../../bin/config');
 
-router.get("/",passport.authenticate("jwt", { session: false }), async (req, res) => {
-  // console.log(req.user.sub);
-  const list = await service.find();
-  res.json(list);
-});
-
 router.get("/getInfo/:token",passport.authenticate("jwt", { session: false }), async (req, res) => {
   const info = await service.findByToken(req.params.token);
   res.json(info);
@@ -37,12 +31,12 @@ router.post(
   }
 );
 
+  // passport.authenticate("jwt", { session: false }),
 router.post('/actionSolicitud',
-  passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const hash = await hashToken.hashPassword(req.user.sub);
-    const listParams = {  
-      id_user: req.user.sub,
+    // const hash = await hashToken.hashPassword(req.user.sub);
+    const listParams = {
+      // id_user: req.user.sub,
       token: req.body.token,
       action: req.body.action
     };

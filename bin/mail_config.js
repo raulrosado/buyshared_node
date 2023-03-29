@@ -24,9 +24,9 @@ function send_mail(name,recipient,option,info){
   });
 
   var mailOptions = {
-   from: '"BuyShare 🛒" <raulrosado91dev@gmail.com>',
+   from: '"BuyShared 🛒" <raulrosado91dev@gmail.com>',
    to: recipient,
-   subject: 'BuyShare, comparte tus compras',
+   subject: 'BuyShared, comparte tus compras',
    html: get_html_message(name,option,info)
   };
 
