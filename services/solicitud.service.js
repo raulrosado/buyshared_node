@@ -67,11 +67,12 @@ class SolicitudesService {
           case 2:
             let infoEvent;
             let infoList;
+            let infoUser = await userService.findByEmail(infoSolicitud.email)
             if(infoSolicitud.id_lista === '0'){
                 console.log('idLista en cero')
                 infoEvent = await eventService.getInfoEvent(infoSolicitud.id_evento)
                 const eventParams = {
-                    id_user: infoEvent.id_user,
+                    id_user: infoUser._id,
                     nombre: infoEvent.nombre,
                     bg: infoEvent.bg,
                     estado: infoEvent.estado,
@@ -81,7 +82,7 @@ class SolicitudesService {
             }else{
               infoList = await listService.findByIdList(infoSolicitud.id_lista)
               const listParams = {
-                id_user: infoList.id_user,
+                id_user: infoUser._id,
                 id_event: "",
                 nombre: infoList.nombre,
                 estado: infoList.estado,
