@@ -63,13 +63,16 @@ class ListService {
         let lists = await ListModel.findOne({ '_id': idList }).exec();
         let avatarList = [];
         let tasks = [];
+        let cant = 0
 
         tasks = await taskService.findByIdList(idList);
+        cant = await taskService.getCantByIdList(idList)
         let otrasListas = []
-        // console.log(lists.referencia)
+        const avatarU = await userService.findAvatarById(lists.id_user);
+        avatarList.push(avatarU);
+
         if(lists.referencia !== ''){
             otrasListas = await ListModel.find({'_id':String(lists.referencia)}).exec();
-            // console.log(otrasListas)
         }else{
             otrasListas = await ListModel.find({'referencia':String(lists._id)}).exec();
         }
@@ -80,6 +83,7 @@ class ListService {
         }
 
         for (const [index, list] of otrasListas.entries()) {
+            cant += await taskService.getCantByIdReference(list.referencia)
             let taskR = await taskService.findByIdList(list._id);
             for (const [index, taskRef] of taskR.entries()) {
                 tasks.push(taskRef)
@@ -90,8 +94,9 @@ class ListService {
         const respuesta = {
             ...lists._doc,
             avatarList,
-            tasks
-        }
+            tasks,
+            'cant':cant
+        };   
         return respuesta;
     }
 
