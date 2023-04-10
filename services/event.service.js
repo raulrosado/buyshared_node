@@ -79,10 +79,11 @@ class EventService {
         // console.log(lists);
         let newLists;
         let newListsAvatar = [];
-            let porC = 0;
-            let taskComplet = 0;
-            let task = []
-            let taskRefer=[]
+        let porC = 0;
+        let taskComplet = 0;
+        let task = []
+        let taskRefer=[]
+
             task = await taskService.findByIdEvent(lists._id);
             if(lists.referencia !== ''){
                 taskRefer = await taskService.findByIdReference(lists.referencia)
@@ -105,10 +106,15 @@ class EventService {
                 const avatar2 = await userService.findAvatarById(usuario.id_user);
                 listaId.push(avatar2);
             }
+            for (const [index, element] of task.entries()) {
+                if(element.estado == 2){
+                    taskComplet++;
+                }
+            }
 
-
+            porC = (taskComplet / task.length)*100;
             // console.log('---------------------------------------');
-            const detail = {...lists._doc,'task':task,'taskReferencia':taskRefer,'avatar':listaId};
+            const detail = {...lists._doc,'task':task,'taskReferencia':taskRefer,'avatar':listaId,'cant':task.length,'complet':porC};
             return detail;
     }
 
@@ -116,14 +122,19 @@ class EventService {
         const tasks = taskService.deleteAllTasksByIdEvent(idEvent)
         const event = EventModel.findOne({ '_id': idEvent});
         let eventInfo = await event.exec();
-        fs.unlink(`./public/images/${eventInfo.bg}`)
-        .then(() => {
-            console.log('File removed')
-        }).catch(err => {
-            console.error('Something wrong happened removing the file', err)
-        })
-        const delEvent = await EventModel.deleteOne({ '_id': idEvent });
-        delEvent.exec();
+        // console.log(eventInfo)
+        try{
+            fs.unlink(`./public/images/${eventInfo.bg}`)
+            .then(() => {
+                console.log('File removed')
+            }).catch(err => {
+                console.error('Something wrong happened removing the file', err)
+            })
+            const delEvent = await EventModel.deleteOne({ '_id': idEvent });
+        }catch{
+            console.log('error al eliminar')
+        }
+        
         return {
             'success':true
         }

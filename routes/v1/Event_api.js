@@ -46,7 +46,8 @@ router.post(
                 referencia: "",
               };
               const list = await service.AddEvent(listParams);
-              res.json(list);
+              let detailEvent = await service.getDetailEvent(list._id)
+              res.json(detailEvent);
         } else {
             responseb.error = true;
             responseb.mensaje = 'Ingrese una imagen';
