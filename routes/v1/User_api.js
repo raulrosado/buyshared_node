@@ -34,6 +34,7 @@ router.get('/', function(req, res, next) {
 router.post('/login',
     passport.authenticate('local', {session: false}),
     async (req,res,next) =>{
+        console.log(req) 
         try {
             const user = req.user;
             const payload = {
@@ -41,6 +42,7 @@ router.post('/login',
               role: user.role
             }
             const token = jwt.sign(payload, config.jwtSecret);
+             delete user.password
             res.status(200).send({
                 status:true,
                 user,
