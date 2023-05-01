@@ -5,7 +5,6 @@ var router = express.Router();
 const multer = require('multer');
 const fs = require("fs");
 
-// const EventService = require("../../services/v2/event.service");
 const EventService = require("../../services/v2/event.services");
 const service = new EventService();
 const { config } = require("../../bin/config");

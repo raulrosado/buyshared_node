@@ -34,7 +34,6 @@ router.get('/', function(req, res, next) {
 router.post('/login',
     passport.authenticate('local', {session: false}),
     async (req,res,next) =>{
-        console.log(req) 
         try {
             const user = req.user;
             const payload = {

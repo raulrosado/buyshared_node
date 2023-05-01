@@ -42,7 +42,7 @@ class EventService {
             }
 
             for (const [index, usuario] of listaUsuariosByIdList.entries()) {
-                // console.log(usuario.id_user)
+            
                 const avatar = await userService.findAvatarById(usuario.id_user);
                 listaId.push(avatar);
             }
@@ -53,12 +53,15 @@ class EventService {
                 }
             }
             porC = (taskComplet / task.length)*100;
+            var complet = 0
+            if(porC <= 0 ){
+                complet = 0
+            }
 
             // console.log("cantidad total:"+task.length)
-            const course = {...element._doc,'cant':task.length,'complet':porC};
+            const course = {...element._doc,'cant':task.length,'complet':complet,'taskcomplet':taskComplet};
             newLists.push(course);
             newListsAvatar.push(listaId);
-            // console.log('---------------------------------------');
         }
 
         // newLists.push(newListsAvatar);

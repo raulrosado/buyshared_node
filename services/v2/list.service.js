@@ -46,7 +46,7 @@ class ListService {
           const course = {...element._doc,'cant':cant};
           newLists.push(course);
         }
-        newLists.push(newListsAvatar);
+        // newLists.push(newListsAvatar);
         // console.log(newLists)
         return newLists;
     }
