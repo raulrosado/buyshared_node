@@ -25,6 +25,15 @@ router.post(
 );
 
 router.get(
+  "/user/avatars/:id_user",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const list = await service.findByIdUserAvatars(req.params.id_user);
+    res.json(list);
+  }
+);
+
+router.get(
   "/user/:id_user",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
