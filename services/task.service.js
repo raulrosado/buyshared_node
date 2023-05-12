@@ -92,7 +92,8 @@ class TaskService {
             {$set: { "estado" : newEstado}}).exec();
         return {
             'success':true,
-            'estado':newEstado
+            'estado':newEstado,
+            'task':task
         }
     }
 

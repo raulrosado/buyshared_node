@@ -25,10 +25,10 @@ router.post(
 );
 
 router.get(
-  "/user/avatars/:id_user",
+  "/avatars",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const list = await service.findByIdUserAvatars(req.params.id_user);
+    const list = await service.findByIdUserAvatars(req.user.sub);
     res.json(list);
   }
 );
