@@ -48,10 +48,13 @@ class ListService {
               newListsAvatar.push(avatar3);
           }
 
-          const course = {...element._doc,'cant':cant};
+          let avat = newListsAvatar.filter(newListsAvatar => newListsAvatar.idList == element._id)
+
+          const course = {...element._doc,'cant':cant,"avatars":avat};
           newLists.push(course);
         }
-        var newResult = {"Lists":newLists,"avatars":newListsAvatar}
+        // var newResult = {"Lists":newLists,"avatars":newListsAvatar}
+        var newResult = {"Lists":newLists}
         return newResult;
     }
 
