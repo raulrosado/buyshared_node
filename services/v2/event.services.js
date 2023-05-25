@@ -18,14 +18,14 @@ class EventService {
             let taskComplet = 0;
             let task =[]
             let listaUsuariosByIdList
-            let listaId = [];
+            let listaAvatars = [];
 
             if(element.referencia === ""){
               task = await taskService.findByIdReferenceEvent(element.id);
               listaUsuariosByIdList = await EventModel.find({'referencia':element.id}).exec();
 
               const avatar = await userService.findAvatarById(element.id_user);
-              listaId.push(avatar);
+              listaAvatars.push(avatar);
             }else{
               try {
                 listaUsuariosByIdList = await EventModel.find({'referencia':element.referencia}).exec();
@@ -36,15 +36,14 @@ class EventService {
 
                 const listaUsuariosByIdEvent = await EventModel.findOne({'_id':element.referencia}).exec();
                 const avatar2 = await userService.findAvatarById(listaUsuariosByIdEvent.id_user);
-                listaId.push(avatar2);
+                listaAvatars.push(avatar2);
               } catch (e) {
               }
             }
 
             for (const [index, usuario] of listaUsuariosByIdList.entries()) {
-            
                 const avatar = await userService.findAvatarById(usuario.id_user);
-                listaId.push(avatar);
+                listaAvatars.push(avatar);
             }
 
             for (const [index, element] of task.entries()) {
@@ -57,14 +56,9 @@ class EventService {
             if(porC <= 0 ){
                 complet = 0
             }
-
-            // console.log("cantidad total:"+task.length)
-            const course = {...element._doc,'cant':task.length,'complet':complet,'taskcomplet':taskComplet};
+            const course = {...element._doc,'cant':task.length,'complet':complet,'taskcomplet':taskComplet,"avatars":listaAvatars};
             newLists.push(course);
-            newListsAvatar.push(listaId);
         }
-
-        // newLists.push(newListsAvatar);
         return newLists;
     }
 }	
