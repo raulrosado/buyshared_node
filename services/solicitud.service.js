@@ -37,9 +37,15 @@ class SolicitudesService {
           }
           // emailServer(null,newSolicitud.email,"addFriend",info)
           emailServer_MailJet(null,newSolicitud.email,"addFriend",info)
-          result = true
+          result = {
+            success:true,
+            message:'Se envio la solicitud'
+          }
         } else {
-          result = false
+          result = {
+            success:false,
+            message:'No se envio la solicitud'
+          }
         }
         return result
     }
