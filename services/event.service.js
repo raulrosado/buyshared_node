@@ -113,7 +113,6 @@ class EventService {
             }
 
             porC = (taskComplet / task.length)*100;
-            // console.log('---------------------------------------');
             const detail = {...lists._doc,'task':task,'taskReferencia':taskRefer,'avatar':listaId,'cant':task.length,'complet':porC};
             return detail;
     }

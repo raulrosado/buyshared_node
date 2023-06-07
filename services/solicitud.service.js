@@ -13,7 +13,7 @@ class SolicitudesService {
     async addSolicitud(newSolicitud){
         const cantSol = SolicitudesModel.find({ 'id_user': newSolicitud.id_user,'id_lista': newSolicitud.id_lista,'id_evento':newSolicitud.id_evento,'email':newSolicitud.email }).count();
         const count = await cantSol.exec();
-        let result = false
+        
         if(count === 0){
           const newSolicitudCreate = new SolicitudesModel(newSolicitud)
           await newSolicitudCreate.save()
@@ -37,17 +37,16 @@ class SolicitudesService {
           }
           // emailServer(null,newSolicitud.email,"addFriend",info)
           emailServer_MailJet(null,newSolicitud.email,"addFriend",info)
-          result = {
+          return {
             success:true,
             message:'Se envio la solicitud'
           }
         } else {
-          result = {
+          return {
             success:false,
             message:'No se envio la solicitud'
           }
         }
-        return result
     }
 
     async find(){
@@ -109,7 +108,6 @@ class SolicitudesService {
         success:false,
         message:'No se encuentra la solicitud'
       }
-
     }
     return resp
 }

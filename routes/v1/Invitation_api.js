@@ -26,8 +26,8 @@ router.post(
       token: hash.replace("/",""),
       estado: 1
     };
-    const list = await service.addSolicitud(listParams).then;
-    res.json(list);
+    const list = await service.addSolicitud(listParams);
+    res.status(200).json(list);
   }
 );
 
@@ -41,7 +41,6 @@ router.post('/actionSolicitud',
       action: req.body.action
     };
     const list = await service.actionSolicitud(listParams);
-    console.log(list)
     res.json(list);
   }
 );
