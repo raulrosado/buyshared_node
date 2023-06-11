@@ -22,7 +22,7 @@ class SolicitudesService {
           let infoEvent;
           let infoList;
           let nombreList="";
-          if(newSolicitud.id_lista === 0){
+          if(newSolicitud.id_lista === "0"){
             infoEvent = await eventService.getInfoEvent(newSolicitud.id_evento)
             nombreList = infoEvent.nombre
           }else{
