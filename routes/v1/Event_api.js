@@ -35,7 +35,6 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   upload.single("file"),
   async (req, res) => {
-    console.log("file:" + req.file);
     if (req.file === undefined) {
       return res.status(400).json({
         error: "No file uploaded"
