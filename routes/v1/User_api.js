@@ -20,7 +20,7 @@ var storage = multer.diskStorage({
     cb(null, 'public/images')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname)
+    cb(null, `img${new Date().getTime()}`+'.jpeg')
   }
 })
 var upload = multer({ storage: storage })
@@ -123,6 +123,7 @@ router.get('/user/detail/:id',
 router.post('/postChangePictur',passport.authenticate('jwt',{session:false}),
     upload.single('file'),
     async (req, res) => {
+    var nameImage = `img${new Date().getTime()}`+'.jpeg'
     if (req.file.length == 0) {
         responseb.error = true;
         responseb.mensaje = 'Ingrese una imagen';
@@ -132,12 +133,12 @@ router.post('/postChangePictur',passport.authenticate('jwt',{session:false}),
         if (req.file.mimetype.indexOf('image') >= 0) {
             const listParams = {
                 id:req.user.sub,
-                avatar: req.file.originalname
+                avatar: nameImage
               };
               const list = await service.changeAvatar(listParams);
               let resp ={
                 success:true,
-                filename:req.file.originalname
+                filename:nameImage
               }
                res.status(200).json(resp);
         } else {
