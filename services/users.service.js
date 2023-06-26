@@ -48,13 +48,14 @@ class UserService {
                 success: true,
                 filename: parametro.avatar
             }
+            UserModel.updateOne({ '_id': { $eq: parametro.id } },
+                {
+                    $set: { "avatar": parametro.avatar }
+                }).exec();
+
             fs.unlink(`./public/images/${infoUser.avatar}`)
                 .then(() => {
                     console.log('File removed')
-                    UserModel.updateOne({ '_id': { $eq: parametro.id } },
-                        {
-                            $set: { "avatar": parametro.avatar }
-                        }).exec();
                     let res = {
                         success: true,
                         filename: parametro.avatar
